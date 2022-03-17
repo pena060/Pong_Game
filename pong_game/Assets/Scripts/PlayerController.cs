@@ -1,36 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
+
+using System.Linq;
 using UnityEngine;
+using static UnityEngine.InputSystem.InputAction;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
 
-    private PlayerControls playercontrols;// controls for player 1
-    private float vertSpeed = 8f;// speed of player 1
-    private float movementInput;// float will read players inputs
+
+    private PlayerInput playerInput;
+    private PlayerMovement playerMovement;
 
     private void Awake() {
-        playercontrols = new PlayerControls();// new controls object
+        var playerMovers = FindObjectsOfType<PlayerMovement>();
+        playerInput = GetComponent<PlayerInput>();
+        var index = playerInput.playerIndex;
+        playerMovement = playerMovers.FirstOrDefault(m => m.getPlayerIndex() == index);
     }
-
-    private void OnEnable() {
-        playercontrols.Enable();// enable object
-    }
-
-    private void OnDisable() {
-        playercontrols.Disable();//disable object
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        movementInput = playercontrols.Move.Vertical.ReadValue<float>();// capture user vertical input
-    }
-
-    void FixedUpdate() {
-        //change players y position based on inputs
-        Vector3 currentPosition = transform.position;
-        currentPosition.y += movementInput * vertSpeed * Time.deltaTime;
-        transform.position = currentPosition;
+    public void onMove(CallbackContext context){
+        playerMovement.inputVector = context.ReadValue<float>();
     }
 }
