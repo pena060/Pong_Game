@@ -6,20 +6,13 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
 
-
-    PlayerControls playerControls;
+    AudioManager audioManager;
+    UIControls uiControls;
     private int p1Score;
     private int p2Score;
-
-
-
-
     [SerializeField] Text score1;
     [SerializeField] Text score2;
-
     [SerializeField] Text winText;
-
-    [SerializeField] AudioSource winSound;
     [SerializeField] GameObject pauseScreen;
     [SerializeField] GameObject winUI;
     [SerializeField] GameObject scoreUI;
@@ -30,20 +23,21 @@ public class GameManager : MonoBehaviour
     private void Awake(){
         p1Score = 0;
         p2Score = 0;
-        playerControls = new PlayerControls();
+        uiControls = new UIControls();
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     private void OnEnable() {
-        playerControls.Enable();
+        uiControls.Enable();
     }
 
     private void OnDisable() {
-        playerControls.Disable();
+        uiControls.Disable();
     }
 
 
     private void Start() {
-        playerControls.Pause.pauseGame.performed += _ => pauseTheScreen();//pause key pressed
+        uiControls.Pause.pauseGame.performed += _ => pauseTheScreen();//pause key pressed
     }
     // Update is called once per frame
     void Update()
@@ -111,9 +105,8 @@ public class GameManager : MonoBehaviour
 
             resetScore();
             winUI.SetActive(true);
-            if(!winSound.isPlaying){
-                winSound.Play();
-            }
+            audioManager.StopSound();
+            audioManager.PlayWinSound();
 
             ball.SetActive(false);
 
@@ -130,9 +123,6 @@ public class GameManager : MonoBehaviour
 
     void newGame(){
         winUI.SetActive(false);
-        if(winSound.isPlaying){
-            winSound.Stop();
-        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         isPaused = false;
         scoreUI.SetActive(true);

@@ -5,18 +5,17 @@ using UnityEngine;
 public class BallCollisionPlayerSound : MonoBehaviour
 {
 
-
-    private AudioSource pong;
+    private AudioManager audioManager;
     [SerializeField] GameObject ball;
 
    private void Awake() {
-       pong = GetComponent<AudioSource>();
+        audioManager = FindObjectOfType<AudioManager>();
    }
 
 
    private void OnCollisionEnter2D(Collision2D other) {
        if(other.gameObject == ball){
-           pong.Play();
+           audioManager.PlayPongBallSound();
        }
    }
 }

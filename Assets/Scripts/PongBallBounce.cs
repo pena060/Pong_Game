@@ -6,11 +6,9 @@ using UnityEngine.UI;
 public class PongBallBounce : MonoBehaviour
 {
 
+    AudioManager audioManager;
     private Rigidbody2D rb;// rigidbody to get the component from within the gameobject
     [SerializeField] float ballSpeed = 0f; // speed of ball (change in inspector)
-
-    [SerializeField] AudioSource countdownSound;
-    [SerializeField] AudioSource startSound;
     SpriteRenderer ballVisual;
 
     Vector2 startPosition;// vector saves starting positon of ball
@@ -24,6 +22,7 @@ public class PongBallBounce : MonoBehaviour
     private void Awake() {
         gameObject.SetActive(true);
         ballVisual = GetComponent<SpriteRenderer>();
+        audioManager = FindObjectOfType<AudioManager>();
         ballVisual.enabled = false;
     }
 
@@ -33,7 +32,7 @@ public class PongBallBounce : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();// get the rigidbody component for the ball
         startPosition = transform.position;// save the starting positon of the ball for resets when scoring a goal
         countdown.text = time.ToString();
-        countdownSound.Play();
+        audioManager.PlayCountdownSound();
          
     }
 
@@ -49,16 +48,15 @@ public class PongBallBounce : MonoBehaviour
             countdown.text = countDownTimer.ToString();
             time -= Time.deltaTime;
             countDownTimer = Mathf.RoundToInt(time);
-                if(!countdownSound.isPlaying && countDownTimer > 0){
+                if(!audioManager.countdownSoundIsPlaying() && countDownTimer > 0){
                     StartCoroutine(SCountdown());
                 }
             if(countDownTimer == 0){
-                countdownSound.Stop();
                 countdown.text = "Start!";
                 ballVisual.enabled = true;
                 StartCoroutine(StartTextCountdown());
                 if(!ballVelocityCalled){
-                    startSound.Play();
+                    audioManager.PlayStartSound();
                     ballVelocityCalled = true;
                     BallVelocityInitialization();
                 }
@@ -82,7 +80,14 @@ public class PongBallBounce : MonoBehaviour
     
     IEnumerator SCountdown(){
          yield return new WaitForSeconds(0.4f);
-         if(!countdownSound.isPlaying)
-            countdownSound.Play();
+         audioManager.PlayCountdownSound();
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.tag == "Player1"){
+            rb.AddForce(transform.right * 32f);
+        } else if(other.gameObject.tag == "Player2"){
+            rb.AddForce(-(transform.right) * 32f);
+        }
     }
 }

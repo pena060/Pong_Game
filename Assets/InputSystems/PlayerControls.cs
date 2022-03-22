@@ -138,45 +138,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
-        },
-        {
-            ""name"": ""Pause"",
-            ""id"": ""325cd177-fa8d-4967-8367-5d58f281368f"",
-            ""actions"": [
-                {
-                    ""name"": ""pauseGame"",
-                    ""type"": ""Button"",
-                    ""id"": ""a7e50152-2242-456b-956e-a6e8963f4245"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""3b3508d7-a9d7-48a5-ab00-6d2b7e477c92"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""pauseGame"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""cd980727-6544-41a3-a4e8-30313a884a26"",
-                    ""path"": ""<Gamepad>/start"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Controller"",
-                    ""action"": ""pauseGame"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
         }
     ],
     ""controlSchemes"": [
@@ -207,9 +168,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         // Move
         m_Move = asset.FindActionMap("Move", throwIfNotFound: true);
         m_Move_Vertical = m_Move.FindAction("Vertical", throwIfNotFound: true);
-        // Pause
-        m_Pause = asset.FindActionMap("Pause", throwIfNotFound: true);
-        m_Pause_pauseGame = m_Pause.FindAction("pauseGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -298,39 +256,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public MoveActions @Move => new MoveActions(this);
-
-    // Pause
-    private readonly InputActionMap m_Pause;
-    private IPauseActions m_PauseActionsCallbackInterface;
-    private readonly InputAction m_Pause_pauseGame;
-    public struct PauseActions
-    {
-        private @PlayerControls m_Wrapper;
-        public PauseActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @pauseGame => m_Wrapper.m_Pause_pauseGame;
-        public InputActionMap Get() { return m_Wrapper.m_Pause; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PauseActions set) { return set.Get(); }
-        public void SetCallbacks(IPauseActions instance)
-        {
-            if (m_Wrapper.m_PauseActionsCallbackInterface != null)
-            {
-                @pauseGame.started -= m_Wrapper.m_PauseActionsCallbackInterface.OnPauseGame;
-                @pauseGame.performed -= m_Wrapper.m_PauseActionsCallbackInterface.OnPauseGame;
-                @pauseGame.canceled -= m_Wrapper.m_PauseActionsCallbackInterface.OnPauseGame;
-            }
-            m_Wrapper.m_PauseActionsCallbackInterface = instance;
-            if (instance != null)
-            {
-                @pauseGame.started += instance.OnPauseGame;
-                @pauseGame.performed += instance.OnPauseGame;
-                @pauseGame.canceled += instance.OnPauseGame;
-            }
-        }
-    }
-    public PauseActions @Pause => new PauseActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -352,9 +277,5 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     public interface IMoveActions
     {
         void OnVertical(InputAction.CallbackContext context);
-    }
-    public interface IPauseActions
-    {
-        void OnPauseGame(InputAction.CallbackContext context);
     }
 }

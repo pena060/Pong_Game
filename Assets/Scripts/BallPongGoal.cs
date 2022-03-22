@@ -5,7 +5,12 @@ public class BallPongGoal : MonoBehaviour
 
 
     private GameManager gm;
+    AudioManager audioManager;
 
+
+    private void Awake() {
+        audioManager = FindObjectOfType<AudioManager>();
+    }
     private void Start() {
         gm = FindObjectOfType<GameManager>();
     }
@@ -16,6 +21,8 @@ public class BallPongGoal : MonoBehaviour
         } else if(other.tag == "Goal2"){// give player 1 a point
             gm.updateP1Score();
         }
+
+        audioManager.PlayGoalSound();
         
     }
 }
