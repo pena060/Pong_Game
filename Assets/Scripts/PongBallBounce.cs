@@ -11,6 +11,7 @@ public class PongBallBounce : MonoBehaviour
 
     [SerializeField] AudioSource countdownSound;
     [SerializeField] AudioSource startSound;
+    SpriteRenderer ballVisual;
 
     Vector2 startPosition;// vector saves starting positon of ball
 
@@ -19,6 +20,12 @@ public class PongBallBounce : MonoBehaviour
     int countDownTimer;
 
     bool ballVelocityCalled = false;
+
+    private void Awake() {
+        gameObject.SetActive(true);
+        ballVisual = GetComponent<SpriteRenderer>();
+        ballVisual.enabled = false;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +55,7 @@ public class PongBallBounce : MonoBehaviour
             if(countDownTimer == 0){
                 countdownSound.Stop();
                 countdown.text = "Start!";
+                ballVisual.enabled = true;
                 StartCoroutine(StartTextCountdown());
                 if(!ballVelocityCalled){
                     startSound.Play();
