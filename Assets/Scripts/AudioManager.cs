@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour
      [SerializeField] AudioClip pongSound;
      [SerializeField] AudioClip pingSound;
      [SerializeField] AudioClip goalSound;
+     [SerializeField] AudioClip menuSound;
 
 
 
@@ -41,6 +42,10 @@ public class AudioManager : MonoBehaviour
 
      public void PlayGoalSound(){
         gameAudio.PlayOneShot(goalSound,1f);
+     }
+
+     public void PlayMenuSound(){
+        gameAudio.PlayOneShot(menuSound, 1f);
      }
 
     public void StopSound(){

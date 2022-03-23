@@ -85,9 +85,9 @@ public class PongBallBounce : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other) {
         if(other.gameObject.tag == "Player1"){
-            rb.AddForce(transform.right * 32f);
+            rb.AddForce(transform.right * 40f);
         } else if(other.gameObject.tag == "Player2"){
-            rb.AddForce(-(transform.right) * 32f);
+            rb.AddForce(-(transform.right) * 40f);
         }
     }
 }

@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-    private float vertSpeed = 9f;// speed of player 1
+    private float vertSpeed = 11f;// speed of player 1
     [HideInInspector] public float inputVector;
     [SerializeField] int playerIndex = 0;
 

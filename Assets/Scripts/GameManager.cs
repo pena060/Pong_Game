@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     UIControls uiControls;
     private int p1Score;
     private int p2Score;
+
+    private float timer;
     [SerializeField] Text score1;
     [SerializeField] Text score2;
     [SerializeField] Text winText;
@@ -44,6 +46,7 @@ public class GameManager : MonoBehaviour
     {
         updateScoreScreen();
         gameWin();
+       
     }
 
     public void updateP1Score(){
@@ -69,7 +72,6 @@ public class GameManager : MonoBehaviour
     }
 
     void pauseGame(){
-        
         Time.timeScale = 0;
         isPaused = true;
         pauseScreen.SetActive(true);  
@@ -127,8 +129,6 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         scoreUI.SetActive(true);
     }
-    
-
 
 
 }
